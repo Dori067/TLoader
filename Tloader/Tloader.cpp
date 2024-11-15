@@ -44,7 +44,7 @@ int movef(bool isjava, bool istl, bool isclient) {
     //std::cout << crp << "\n";
 
 
-    //copying the folders and files to the appdata folder using the "path" string.....
+    //copying the folders and files to the appdata folder using the "path" string....
 
 
     return 0;
@@ -58,6 +58,10 @@ int setdir() {
     std::string username(user, strlen(user));
     std::cout << username << "\n";
 
+
+    //sets the game files directory for the launcher....
+
+
     return 0;
 };
 
@@ -67,6 +71,7 @@ int main() {
     bool ifjava;
     bool iftl;
     bool ifclient;
+    // jdk xx.xx.x should be replaced by "java"
     fs::path current_dir = fs::current_path();
     fs::path java_dir = current_dir / "java";
     fs::path client_dir = current_dir / ".minecraft";
