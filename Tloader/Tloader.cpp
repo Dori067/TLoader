@@ -12,7 +12,7 @@ namespace fs = std::filesystem;
 int movef(bool isjava, bool istl, bool isclient) {
 
     std::locale::global(std::locale(""));
-
+    //the folders must be in the same directory as the executable
     std::string javaf = "javat";
     std::string tlf = ".tlauncher";
     std::string clientf = ".minecraft";
@@ -43,9 +43,14 @@ int movef(bool isjava, bool istl, bool isclient) {
 
     //std::cout << crp << "\n";
 
-
+    if (isjava == true && istl == true && isclient == true) {
+        std::cout << "all folders are in a good shape \n";
+    }
+    else {
+        //std::cout << "you missing something \n";
+    }
+    
     //copying the folders and files to the appdata folder using the "path" string....
-
 
     return 0;
 };
@@ -58,9 +63,7 @@ int setdir() {
     std::string username(user, strlen(user));
     std::cout << username << "\n";
 
-
     //sets the game files directory for the launcher....
-
 
     return 0;
 };
@@ -72,6 +75,7 @@ int main() {
     bool iftl;
     bool ifclient;
     // jdk xx.xx.x should be replaced by "java"
+    //the folders must be in the same directory as the executable
     fs::path current_dir = fs::current_path();
     fs::path java_dir = current_dir / "java";
     fs::path client_dir = current_dir / ".minecraft";
