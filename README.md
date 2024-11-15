@@ -1,2 +1,3 @@
 # Tloader
-An easy way to install TLauncher from an archived version without administrator account on win 10/11
+
+Install TLauncher using archived versions of ".tlauncher" and ".minecraft" files, along with a portable version of Java. This method allows you to install TLauncher without needing administrator privileges, making it ideal for use on school or work computers.
