@@ -49,9 +49,6 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged, bool defjava) {
         if (defjava == true) {
             std::cout << "using default java";
         }
-        else {
-            std::cout << "All required folders are found, and they are ready to be moved. \n";
-        }
     }
     else {
         std::cout << "You are missing something \n";
@@ -151,6 +148,7 @@ int checkex() {
             setdir(ifjava, iftl, ifclient, defjava);
         }
         else {
+            ifjava = true;
             defjava = false;
             setdir(ifjava, iftl, ifclient, defjava);
         }
