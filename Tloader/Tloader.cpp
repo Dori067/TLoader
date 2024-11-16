@@ -10,7 +10,7 @@
 
 namespace fs = std::filesystem;
 
-int movef(bool isjava, bool istl, bool isclient) {
+int movef(bool isjava, bool istl, bool isclient, bool ischanged) {
 
     std::locale::global(std::locale(""));
     //the folders must be in the same directory as the executable
@@ -44,8 +44,8 @@ int movef(bool isjava, bool istl, bool isclient) {
 
     std::cout << path << std::endl;
 
-    if (isjava == true && istl == true && isclient == true) {
-        std::cout << "all folders are found \n";
+    if (isjava == true && istl == true && isclient == true && ischanged == true) {
+        std::cout << "all folders are found, and they are ready to be moved \n";
     }
     else {
         std::cout << "you missing something \n";
@@ -56,30 +56,42 @@ int movef(bool isjava, bool istl, bool isclient) {
     return 0;
 };
 
-int setdir() {
+int setdir(bool isjava, bool istl, bool isclient) {
     //_setmode(_fileno(stdout), _O_U16TEXT);
-
+    bool ischanged;
     std::locale::global(std::locale(""));
 
     char* user = getenv("username");
     std::string username(user, strlen(user));
     std::cout << username << "\n";
 
-    std::ofstream myfile;
-    myfile.open(".tlauncher\\filename.txt", std::ios::app);
+    if (istl == true && isjava == true && isclient == true) {
+        std::ofstream myfile;
+            myfile.open(".tlauncher\\filename.txt", std::ios::app);
 
-    if (myfile.is_open()) {
-        myfile << "minecraft.gamedir=C\:\\Users\\" << username << "\\AppData\\Roaming\\.minecraft\n";
-        myfile.close();
-        std::cout << "line added to file. \n";
+            if (myfile.is_open()) {
+ 
+                if (isjava == true && istl == true && isclient == true) {
+                    std::cout << "all folders are found \n";
+                    myfile << "minecraft.gamedir=C\:\\Users\\" << username << "\\AppData\\Roaming\\.minecraft\n";
+                    myfile.close();
+                    ischanged = true;
+                    movef(isjava, istl, isclient, ischanged);
+                }
+                else {
+                    std::cout << "you missing something \n";
+                    ischanged = false;
+                    return 0;
+                }
+            }
+            else {
+                std::cout << "Unable to open file. \n";
+                return 0;
+            }
+        
     }
-    else {
-        std::cout << "Unable to open file. \n";
-    }
-
     //sets the game files directory for the launcher....
 
-    return 0;
 };
 
 int main() {
@@ -122,8 +134,7 @@ int main() {
         std::cout << "Client Not Found \n";
         ifclient = false;
     };
-    setdir();
-    movef(ifjava, iftl, ifclient);
+    setdir(ifjava, iftl, ifclient);
 
     std::cout << ifjava << iftl << ifclient;
     std::cin >> num;
