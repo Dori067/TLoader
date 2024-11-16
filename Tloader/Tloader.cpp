@@ -7,6 +7,7 @@
 #include <fstream>
 #include <chrono>
 #include <thread>
+#include <cstdio>
 
 namespace fs = std::filesystem;
 
@@ -54,29 +55,57 @@ int setdir(bool isjava, bool istl, bool isclient, bool defjava) {
     char* user = getenv("username");
     std::string username(user, strlen(user));
     std::cout << username << "\n";
-    //needs a feature that checks if the gamedir line is alr there
+
     if (istl == true && isjava == true && isclient == true) {
-        std::ofstream myfile;
-        myfile.open(".tlauncher\\filename.txt", std::ios::app);
+        std::ifstream file(".tlauncher\\tlauncher-2.0.properties");
+        if (!file.is_open()) {
+            std::cerr << "Cant open file." << std::endl;
 
-        if (myfile.is_open()) {
-
-            if (isjava == true && istl == true && isclient == true) {
-                //std::cout << "all folders are found \n";
-                myfile << "minecraft.gamedir=C\\:\\\\Users\\\\" << username << "\\\\AppData\\\\Roaming\\\\.minecraft\n";
-                myfile.close();
-                ischanged = true;
-                movef(isjava, istl, isclient, ischanged, defjava);
-            }
-            else {
-                std::cout << "You are missing something \n";
-                ischanged = false;
-                return 0;
-            }
         }
-        else {
-            std::cout << "Unable to open file. \n";
-            return 0;
+        std::vector<std::string> lines;
+        std::string line;
+        while (getline(file, line)) {
+            if (line.find("minecraft.gamedir=") == 0) {
+                std::cout << "Found line: " << line << std::endl;
+
+                std::ifstream source_file(".tlauncher\\tlauncher-2.0.properties");
+                std::ofstream destination_file(".tlauncher\\temp1.txt");
+
+                if (!source_file.is_open()) {
+                    std::cerr << "Cant open main file." << std::endl;
+                    return 1;
+                }
+
+                if (!destination_file.is_open()) {
+                    std::cerr << "Cant open temp file." << std::endl;
+                    source_file.close();
+
+                }
+                char ch;
+                while (source_file.get(ch)) {
+                    destination_file << ch;
+                }
+
+                source_file.close();
+                destination_file.close();
+                std::this_thread::sleep_for(std::chrono::seconds(2));
+                std::ifstream input_file(".tlauncher\\temp1.txt");
+                std::ofstream output_file(".tlauncher\\tlauncher-2.0.properties");
+                std::string line;
+                while (getline(input_file, line)) {
+                    if (line.find("minecraft.gamedir=") == 0) {
+                        output_file << "minecraft.gamedir=C\\:\\\\Users\\\\" << username << "\\\\AppData\\\\Roaming\\\\.minecraft\n";
+                    }
+                    else {
+                        output_file << line << "\n";
+                    }
+                }
+
+                input_file.close();
+                output_file.close();
+
+                //std::this_thread::sleep_for(std::chrono::seconds(5));
+            }
         }
     }
     else {
@@ -158,6 +187,35 @@ int checkex() {
     }
 };
 
+int launch(bool ftls, bool fcls, bool fjvs, bool fjav) {
+    if (ftls == true && fcls == true && fjav == true) {
+        std::locale::global(std::locale(""));
+        char* user = getenv("username");
+        std::string username(user, strlen(user));
+        std::string tls = "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
+        std::string cmd = "java -jar C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
+        fs::path tl_dir = tls;
+        if (fs::exists(tls)) {
+            int result = system(cmd.c_str());
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            return 0;
+        }
+    }
+    if (ftls == true && fcls == true && fjav == false && fjvs == true) {
+        std::locale::global(std::locale(""));
+        char* user = getenv("username");
+        std::string username(user, strlen(user));
+        std::string tls = "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
+        std::string cmd = "C:\\Users\\" + username + "\\AppData\\Roaming\\javap\\bin\\java.exe" + "-jar" + "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
+        fs::path tl_dir = tls;
+        if (fs::exists(tls)) {
+            int result = system(cmd.c_str());
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            return 0;
+        }
+    }
+}
+
 int isinstalled() {
     std::locale::global(std::locale(""));
 
@@ -202,35 +260,6 @@ int isinstalled() {
         launch(ftls, fcls, fjvs, fjav);
     }
 
-}
-
-int launch(bool ftls, bool fcls, bool fjvs, bool fjav) {
-    if (ftls == true && fcls == true && fjav == true) {
-        std::locale::global(std::locale(""));
-        char* user = getenv("username");
-        std::string username(user, strlen(user));
-        std::string tls = "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
-        std::string cmd = "java -jar C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
-        fs::path tl_dir = tls;
-        if (fs::exists(tls)) {
-            int result = system(cmd.c_str());
-            std::this_thread::sleep_for(std::chrono::seconds(3));
-            return 0;
-        }
-    }
-    if (ftls == true && fcls == true && fjav == false && fjvs == true) {
-        std::locale::global(std::locale(""));
-        char* user = getenv("username");
-        std::string username(user, strlen(user));
-        std::string tls = "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
-        std::string cmd = "C:\\Users\\" + username + "\\AppData\\Roaming\\javap\\bin\\java.exe" + "-jar" + "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
-        fs::path tl_dir = tls;
-        if (fs::exists(tls)) {
-            int result = system(cmd.c_str());
-            std::this_thread::sleep_for(std::chrono::seconds(3));
-            return 0;
-        }
-    }
 }
 
 int main() {
