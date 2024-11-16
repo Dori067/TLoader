@@ -10,7 +10,7 @@
 
 namespace fs = std::filesystem;
 
-int movef(bool isjava, bool istl, bool isclient, bool ischanged) {
+int movef(bool isjava, bool istl, bool isclient, bool ischanged, bool defjava) {
 
     std::locale::global(std::locale(""));
     //the folders must be in the same directory as the executable
@@ -45,18 +45,24 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged) {
     std::cout << path << std::endl;
 
     if (isjava == true && istl == true && isclient == true && ischanged == true) {
-        std::cout << "all folders are found, and they are ready to be moved \n";
+        std::cout << "All required folders are found, and they are ready to be moved. \n";
+        if (defjava == true) {
+            std::cout << "using default java";
+        }
+        else {
+            std::cout << "All required folders are found, and they are ready to be moved. \n";
+        }
     }
     else {
-        std::cout << "you missing something \n";
+        std::cout << "You are missing something \n";
     }
     
     //copying the folders and files to the appdata folder using the "path" string....
-
+    //if java already installed, it wont copy the java folder.
     return 0;
 };
 
-int setdir(bool isjava, bool istl, bool isclient) {
+int setdir(bool isjava, bool istl, bool isclient, bool defjava) {
     //_setmode(_fileno(stdout), _O_U16TEXT);
     bool ischanged;
     std::locale::global(std::locale(""));
@@ -64,7 +70,7 @@ int setdir(bool isjava, bool istl, bool isclient) {
     char* user = getenv("username");
     std::string username(user, strlen(user));
     std::cout << username << "\n";
-
+    //needs a feature that checks if the gamedir line is alr there
     if (istl == true && isjava == true && isclient == true) {
         std::ofstream myfile;
         myfile.open(".tlauncher\\filename.txt", std::ios::app);
@@ -72,14 +78,14 @@ int setdir(bool isjava, bool istl, bool isclient) {
         if (myfile.is_open()) {
 
             if (isjava == true && istl == true && isclient == true) {
-                std::cout << "all folders are found \n";
+                //std::cout << "all folders are found \n";
                 myfile << "minecraft.gamedir=C\\:\\\\Users\\\\" << username << "\\\\AppData\\\\Roaming\\\\.minecraft\n";
                 myfile.close();
                 ischanged = true;
-                movef(isjava, istl, isclient, ischanged);
+                movef(isjava, istl, isclient, ischanged, defjava);
             }
             else {
-                std::cout << "you missing something \n";
+                std::cout << "You are missing something \n";
                 ischanged = false;
                 return 0;
             }
@@ -90,18 +96,18 @@ int setdir(bool isjava, bool istl, bool isclient) {
         }
     }
     else {
-        std::cout << "please check your files and folders.";
+        std::cout << "Please check your files and folders.";
     }
-    //sets the game files directory for the launcher....
 
 };
 
 int checkex() {
     std::locale::global(std::locale(""));
+    bool defjava = false;
     bool ifjava;
     bool iftl;
     bool ifclient;
-    // jdk xx.xx.x should be replaced by "java"
+    // jdk xx.xx.x should be replaced by "java" if you are using a portable version of java
     //the folders must be in the same directory as the executable
     fs::path current_dir = fs::current_path();
     fs::path java_dir = current_dir / "java";
@@ -113,7 +119,6 @@ int checkex() {
         ifjava = true;
     }
     else {
-        std::cout << "Java Not Found \n";
         ifjava = false;
     };
 
@@ -134,8 +139,38 @@ int checkex() {
         std::cout << "Client Not Found \n";
         ifclient = false;
     };
-    setdir(ifjava, iftl, ifclient);
 
+
+    if (ifjava == true) {
+        std::string command = "java -version";
+        int result = system(command.c_str());
+        if (result == 0) {
+            std::cout << "Java is installed by default on this machine." << std::endl;
+            ifjava = true;
+            defjava = true;
+            setdir(ifjava, iftl, ifclient, defjava);
+        }
+        else {
+            defjava = false;
+            setdir(ifjava, iftl, ifclient, defjava);
+        }
+    }
+    else {
+        std::string command = "java -version";
+        int result = system(command.c_str());
+        if (result == 0) {
+            std::cout << "Java is installed by default on this machine." << std::endl;
+            ifjava = true;
+            defjava = true;
+            setdir(ifjava, iftl, ifclient, defjava);
+        }
+        else {
+            std::cout << "Java is not installed and not found in the folders." << std::endl;
+            ifjava = false;
+            defjava = false;
+            setdir(ifjava, iftl, ifclient, defjava);
+        }
+    }
 };
 
 int main() {
