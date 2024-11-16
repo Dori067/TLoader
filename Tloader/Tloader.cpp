@@ -6,6 +6,7 @@
 #include <Lmcons.h>
 #include <io.h>
 #include <fcntl.h>
+#include <fstream>
 
 namespace fs = std::filesystem;
 
@@ -39,15 +40,15 @@ int movef(bool isjava, bool istl, bool isclient) {
 
     path.replace(9, 1, replace);
 
+    fs::path appdata_dir = path;
+
     std::cout << path << std::endl;
 
-    //std::cout << crp << "\n";
-
     if (isjava == true && istl == true && isclient == true) {
-        std::cout << "all folders are in a good shape \n";
+        std::cout << "all folders are found \n";
     }
     else {
-        //std::cout << "you missing something \n";
+        std::cout << "you missing something \n";
     }
     
     //copying the folders and files to the appdata folder using the "path" string....
@@ -57,11 +58,24 @@ int movef(bool isjava, bool istl, bool isclient) {
 
 int setdir() {
     //_setmode(_fileno(stdout), _O_U16TEXT);
+
     std::locale::global(std::locale(""));
 
     char* user = getenv("username");
     std::string username(user, strlen(user));
     std::cout << username << "\n";
+
+    std::ofstream myfile;
+    myfile.open(".tlauncher\\filename.txt", std::ios::app);
+
+    if (myfile.is_open()) {
+        myfile << "minecraft.gamedir=C\:\\Users\\" << username << "\\AppData\\Roaming\\.minecraft\n";
+        myfile.close();
+        std::cout << "line added to file. \n";
+    }
+    else {
+        std::cout << "Unable to open file. \n";
+    }
 
     //sets the game files directory for the launcher....
 
