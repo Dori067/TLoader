@@ -67,36 +67,37 @@ int setdir(bool isjava, bool istl, bool isclient) {
 
     if (istl == true && isjava == true && isclient == true) {
         std::ofstream myfile;
-            myfile.open(".tlauncher\\filename.txt", std::ios::app);
+        myfile.open(".tlauncher\\filename.txt", std::ios::app);
 
-            if (myfile.is_open()) {
- 
-                if (isjava == true && istl == true && isclient == true) {
-                    std::cout << "all folders are found \n";
-                    myfile << "minecraft.gamedir=C\\:\\\\Users\\\\" << username << "\\\\AppData\\\\Roaming\\\\.minecraft\n";
-                    myfile.close();
-                    ischanged = true;
-                    movef(isjava, istl, isclient, ischanged);
-                }
-                else {
-                    std::cout << "you missing something \n";
-                    ischanged = false;
-                    return 0;
-                }
+        if (myfile.is_open()) {
+
+            if (isjava == true && istl == true && isclient == true) {
+                std::cout << "all folders are found \n";
+                myfile << "minecraft.gamedir=C\\:\\\\Users\\\\" << username << "\\\\AppData\\\\Roaming\\\\.minecraft\n";
+                myfile.close();
+                ischanged = true;
+                movef(isjava, istl, isclient, ischanged);
             }
             else {
-                std::cout << "Unable to open file. \n";
+                std::cout << "you missing something \n";
+                ischanged = false;
                 return 0;
             }
-        
+        }
+        else {
+            std::cout << "Unable to open file. \n";
+            return 0;
+        }
+    }
+    else {
+        std::cout << "please check your files and folders.";
     }
     //sets the game files directory for the launcher....
 
 };
 
-int main() {
+int checkex() {
     std::locale::global(std::locale(""));
-    int num;
     bool ifjava;
     bool iftl;
     bool ifclient;
@@ -107,18 +108,6 @@ int main() {
     fs::path client_dir = current_dir / ".minecraft";
     fs::path tl_dir = current_dir / ".tlauncher";
 
-    std::cout << R"(
-__/\\\\\\\\\\\\\\\__/\\\\\\_________________________________________/\\\_______________________________        
- _\///////\\\/////__\////\\\________________________________________\/\\\_______________________________       
-  _______\/\\\__________\/\\\________________________________________\/\\\_______________________________      
-   _______\/\\\__________\/\\\________/\\\\\_____/\\\\\\\\\___________\/\\\______/\\\\\\\\___/\\/\\\\\\\__     
-    _______\/\\\__________\/\\\______/\\\///\\\__\////////\\\_____/\\\\\\\\\____/\\\/////\\\_\/\\\/////\\\_    
-     _______\/\\\__________\/\\\_____/\\\__\//\\\___/\\\\\\\\\\___/\\\////\\\___/\\\\\\\\\\\__\/\\\___\///__   
-      _______\/\\\__________\/\\\____\//\\\__/\\\___/\\\/////\\\__\/\\\__\/\\\__\//\\///////___\/\\\_________  
-       _______\/\\\________/\\\\\\\\\__\///\\\\\/___\//\\\\\\\\/\\_\//\\\\\\\/\\__\//\\\\\\\\\\_\/\\\_________ 
-        _______\///________\/////////_____\/////______\////////\//___\///////\//____\//////////__\///__________
-)";
-    std::cout << "By Dori067\n\n";
     if (fs::exists(java_dir) && fs::is_directory(java_dir)) {
         std::cout << "Java Found \n";
         ifjava = true;
@@ -147,6 +136,24 @@ __/\\\\\\\\\\\\\\\__/\\\\\\_________________________________________/\\\________
     };
     setdir(ifjava, iftl, ifclient);
 
-    std::cout << ifjava << iftl << ifclient;
+};
+
+int main() {
+    std::locale::global(std::locale(""));
+    int num;
+
+    std::cout << R"(
+__/\\\\\\\\\\\\\\\__/\\\\\\_________________________________________/\\\_______________________________        
+ _\///////\\\/////__\////\\\________________________________________\/\\\_______________________________       
+  _______\/\\\__________\/\\\________________________________________\/\\\_______________________________      
+   _______\/\\\__________\/\\\________/\\\\\_____/\\\\\\\\\___________\/\\\______/\\\\\\\\___/\\/\\\\\\\__     
+    _______\/\\\__________\/\\\______/\\\///\\\__\////////\\\_____/\\\\\\\\\____/\\\/////\\\_\/\\\/////\\\_    
+     _______\/\\\__________\/\\\_____/\\\__\//\\\___/\\\\\\\\\\___/\\\////\\\___/\\\\\\\\\\\__\/\\\___\///__   
+      _______\/\\\__________\/\\\____\//\\\__/\\\___/\\\/////\\\__\/\\\__\/\\\__\//\\///////___\/\\\_________  
+       _______\/\\\________/\\\\\\\\\__\///\\\\\/___\//\\\\\\\\/\\_\//\\\\\\\/\\__\//\\\\\\\\\\_\/\\\_________ 
+        _______\///________\/////////_____\/////______\////////\//___\///////\//____\//////////__\///__________
+)";
+    std::cout << "By Dori067\n\n";
+    checkex();
     std::cin >> num;
 }
