@@ -37,19 +37,12 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged, bool defjava) {
 
     if (isjava == true && istl == true && isclient == true && ischanged == true) {
         std::cout << "All required folders are found, and they are ready to be moved. \n";
-        if (defjava == true) {
-            std::cout << "using default java";
-        }
-        else {
-
-        }
+        //copying the folders and files to the appdata folder using the "path" string....
     }
     else {
         std::cout << "You are missing something \n";
     }
     
-    //copying the folders and files to the appdata folder using the "path" string....
-    //if java already installed, it wont copy the java folder.
     return 0;
 };
 
@@ -202,7 +195,13 @@ int isinstalled() {
         fjav = false;
     }
     std::cout << ftls << fcls << fjvs << fjav;
-    launch(ftls, fcls, fjvs, fjav);
+    if (ftls == false && fcls == false) {
+        checkex();
+    }
+    if (ftls == true && fcls == true) {
+        launch(ftls, fcls, fjvs, fjav);
+    }
+
 }
 
 int launch(bool ftls, bool fcls, bool fjvs, bool fjav) {
@@ -252,5 +251,5 @@ __/\\\\\\\\\\\\\\\__/\\\\\\_________________________________________/\\\________
     std::cout << "By Dori067\n\n";
     //launch();
     //checkex();
-    //isinstalled();
+    isinstalled();
 }
