@@ -38,7 +38,7 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged, bool defjava) {
 
     if (isjava == true && istl == true && isclient == true && ischanged == true) {
         std::cout << "All required folders are found, and they are ready to be moved. \n";
-        //copying the folders and files to the appdata folder using the "path" string....
+        //copying the folders and files to the appdata folder using the "path" string...
     }
     else {
         std::cout << "You are missing something \n";
@@ -48,7 +48,6 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged, bool defjava) {
 };
 
 int setdir(bool isjava, bool istl, bool isclient, bool defjava) {
-    //_setmode(_fileno(stdout), _O_U16TEXT);
     bool ischanged;
     std::locale::global(std::locale(""));
 
@@ -67,7 +66,7 @@ int setdir(bool isjava, bool istl, bool isclient, bool defjava) {
         while (getline(file, line)) {
             if (line.find("minecraft.gamedir=") == 0) {
                 std::cout << "Found line: " << line << std::endl;
-
+                
                 std::ifstream source_file(".tlauncher\\tlauncher-2.0.properties");
                 std::ofstream destination_file(".tlauncher\\temp1.txt");
 
@@ -95,6 +94,8 @@ int setdir(bool isjava, bool istl, bool isclient, bool defjava) {
                 while (getline(input_file, line)) {
                     if (line.find("minecraft.gamedir=") == 0) {
                         output_file << "minecraft.gamedir=C\\:\\\\Users\\\\" << username << "\\\\AppData\\\\Roaming\\\\.minecraft\n";
+                        ischanged = true;
+                        //movef();
                     }
                     else {
                         output_file << line << "\n";
@@ -120,7 +121,7 @@ int checkex() {
     bool ifjava;
     bool iftl;
     bool ifclient;
-    // jdk xx.xx.x should be replaced by "java" if you are using a portable version of java
+    //jdk xx.xx.xx should be replaced by "javap" if you are using a portable version of java
     //the folders must be in the same directory as the executable
     fs::path current_dir = fs::current_path();
     fs::path java_dir = current_dir / "javap";
@@ -188,6 +189,7 @@ int checkex() {
 };
 
 int launch(bool ftls, bool fcls, bool fjvs, bool fjav) {
+    std::locale::global(std::locale(""));
     if (ftls == true && fcls == true && fjav == true) {
         std::locale::global(std::locale(""));
         char* user = getenv("username");
