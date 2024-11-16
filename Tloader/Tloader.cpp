@@ -73,7 +73,7 @@ int setdir(bool isjava, bool istl, bool isclient) {
  
                 if (isjava == true && istl == true && isclient == true) {
                     std::cout << "all folders are found \n";
-                    myfile << "minecraft.gamedir=C\:\\Users\\" << username << "\\AppData\\Roaming\\.minecraft\n";
+                    myfile << "minecraft.gamedir=C\\:\\\\Users\\\\" << username << "\\\\AppData\\\\Roaming\\\\.minecraft\n";
                     myfile.close();
                     ischanged = true;
                     movef(isjava, istl, isclient, ischanged);
