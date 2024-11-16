@@ -2,11 +2,11 @@
 #include <filesystem>
 #include <string>
 #include <windows.h>
-#include <shlobj.h>
-#include <Lmcons.h>
 #include <io.h>
 #include <fcntl.h>
 #include <fstream>
+#include <chrono>
+#include <thread>
 
 namespace fs = std::filesystem;
 
@@ -14,7 +14,7 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged, bool defjava) {
 
     std::locale::global(std::locale(""));
     //the folders must be in the same directory as the executable
-    std::string javaf = "java";
+    std::string javaf = "javap";
     std::string tlf = ".tlauncher";
     std::string clientf = ".minecraft";
 
@@ -23,15 +23,6 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged, bool defjava) {
     fs::path clientf_dir = fs::current_path() / clientf;
 
     std::string crp = fs::current_path().string();
-        //std::string appdata_path = "%appdata%";
-        //fs::path appdata_folder = appdata_path;
-
-        //try {
-        //    std::filesystem::copy(javaf_dir, appdata_folder);
-        //}
-        //catch (std::filesystem::filesystem_error& e) {
-        //    std::cout << e.what() << '\n';
-        //}
     char* user = getenv("username");
     std::string username(user, strlen(user));
 
@@ -48,6 +39,9 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged, bool defjava) {
         std::cout << "All required folders are found, and they are ready to be moved. \n";
         if (defjava == true) {
             std::cout << "using default java";
+        }
+        else {
+
         }
     }
     else {
@@ -107,7 +101,7 @@ int checkex() {
     // jdk xx.xx.x should be replaced by "java" if you are using a portable version of java
     //the folders must be in the same directory as the executable
     fs::path current_dir = fs::current_path();
-    fs::path java_dir = current_dir / "java";
+    fs::path java_dir = current_dir / "javap";
     fs::path client_dir = current_dir / ".minecraft";
     fs::path tl_dir = current_dir / ".tlauncher";
 
@@ -171,6 +165,75 @@ int checkex() {
     }
 };
 
+int isinstalled() {
+    std::locale::global(std::locale(""));
+
+    bool ftls = false;
+    bool fcls = false;
+    bool fjvs = false;
+    bool fjav = false;
+
+    char* user = getenv("username");
+    std::string username(user, strlen(user));
+    std::string cls = "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft";
+    std::string tls = "C:\\Users\\" + username + "\\AppData\\Roaming\\.tlauncher";
+    std::string jvs = "C:\\Users\\" + username + "\\AppData\\Roaming\\javap";
+    fs::path tl_dir = tls;
+    fs::path client_dir = cls;
+    fs::path javaport_dir = jvs;
+
+    if (fs::exists(tls)) {
+        ftls = true;
+    }
+    if (fs::exists(cls)) {
+        fcls = true;
+    }
+    if (fs::exists(jvs)) {
+        fjvs = true;
+    }
+
+    std::string command = "java -version";
+    int result = system(command.c_str());
+    if (result == 0) {
+        fjav = true;
+
+    }
+    else {
+        fjav = false;
+    }
+    std::cout << ftls << fcls << fjvs << fjav;
+    launch(ftls, fcls, fjvs, fjav);
+}
+
+int launch(bool ftls, bool fcls, bool fjvs, bool fjav) {
+    if (ftls == true && fcls == true && fjav == true) {
+        std::locale::global(std::locale(""));
+        char* user = getenv("username");
+        std::string username(user, strlen(user));
+        std::string tls = "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
+        std::string cmd = "java -jar C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
+        fs::path tl_dir = tls;
+        if (fs::exists(tls)) {
+            int result = system(cmd.c_str());
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            return 0;
+        }
+    }
+    if (ftls == true && fcls == true && fjav == false && fjvs == true) {
+        std::locale::global(std::locale(""));
+        char* user = getenv("username");
+        std::string username(user, strlen(user));
+        std::string tls = "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
+        std::string cmd = "C:\\Users\\" + username + "\\AppData\\Roaming\\javap\\bin\\java.exe" + "-jar" + "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
+        fs::path tl_dir = tls;
+        if (fs::exists(tls)) {
+            int result = system(cmd.c_str());
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            return 0;
+        }
+    }
+}
+
 int main() {
     std::locale::global(std::locale(""));
     int num;
@@ -187,6 +250,7 @@ __/\\\\\\\\\\\\\\\__/\\\\\\_________________________________________/\\\________
         _______\///________\/////////_____\/////______\////////\//___\///////\//____\//////////__\///__________
 )";
     std::cout << "By Dori067\n\n";
-    checkex();
-    std::cin >> num;
+    //launch();
+    //checkex();
+    //isinstalled();
 }
