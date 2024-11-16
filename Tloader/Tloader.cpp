@@ -14,7 +14,7 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged) {
 
     std::locale::global(std::locale(""));
     //the folders must be in the same directory as the executable
-    std::string javaf = "javat";
+    std::string javaf = "java";
     std::string tlf = ".tlauncher";
     std::string clientf = ".minecraft";
 
