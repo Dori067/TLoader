@@ -2,7 +2,7 @@
 
 ### Install TLauncher using archived versions of ".tlauncher" and ".minecraft" files, along with a portable version of Java. This allows you to install TLauncher without needing administrator privileges, making it ideal for use on school or work computers.
 > [!NOTE]
-> TLoader acts as a launcher and downloader for Tlauncher. Once the program set up the game files it will act as a launcher for it.
+> TLoader acts as a launcher and preparer for Tlauncher. Once the program prepared the game files it will act as a launcher for it.
 
 
 ### How to use:
