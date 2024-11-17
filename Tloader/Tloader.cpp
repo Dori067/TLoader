@@ -38,6 +38,7 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged, bool defjava) {
 
     if (isjava == true && istl == true && isclient == true && ischanged == true) {
         std::cout << "All required folders are found, and they are ready to be moved. \n";
+        //this moves the "javap" folder too, but there will be that only moves the .tl and .mine folders
         //copying the folders and files to the appdata folder using the "path" string...
     }
     else {
@@ -55,7 +56,7 @@ int setdir(bool isjava, bool istl, bool isclient, bool defjava) {
     std::string username(user, strlen(user));
     std::cout << username << "\n";
 
-    if (istl == true && isjava == true && isclient == true) {
+    if (istl == true && isclient == true && isjava == true or defjava == true) {
         std::ifstream file(".tlauncher\\tlauncher-2.0.properties");
         if (!file.is_open()) {
             std::cerr << "Cant open file." << std::endl;
@@ -175,7 +176,7 @@ int checkex() {
         int result = system(command.c_str());
         if (result == 0) {
             std::cout << "Java is installed by default on this machine." << std::endl;
-            ifjava = true;
+            ifjava = false;
             defjava = true;
             setdir(ifjava, iftl, ifclient, defjava);
         }
