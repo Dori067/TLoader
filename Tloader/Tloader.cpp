@@ -40,27 +40,41 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged, bool defjava) {
     if (isjava == true && istl == true && isclient == true && ischanged == true) {
         std::cout << "All required folders are found, and they are ready to be moved. \n";
         try {
+            std::cout << "Copying in progress, please wait. This might take a while. \n";
             fs::create_directory(javaf_des);
             fs::create_directory(client_dir);
             fs::create_directory(tl_dir);
+            std::cout << "Copying java." << std::endl;
             fs::copy(java_dir, javaf_des, fs::copy_options::recursive);
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            std::cout << "Copying minecraft." << std::endl;
             fs::copy(client_dir, clientf_des, fs::copy_options::recursive);
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            std::cout << "Copying tlauncher." << std::endl;
             fs::copy(tl_dir, tlf_des, fs::copy_options::recursive);
+            std::this_thread::sleep_for(std::chrono::seconds(3));
             std::cout << "Folders copied successfully!" << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(3));
 
         }
         catch (const std::filesystem::filesystem_error& e) {
             std::cerr << "Error copying folder: " << e.what() << std::endl;
         }
     }
-    if (defjava == true && istl == true && isclient == true && ischanged == true) {
+    if (defjava == true && isjava == false && istl == true && isclient == true && ischanged == true) {
         try {
             std::cout << "All required folders are found, and they are ready to be moved. \n";
+            std::cout << "Copying in progress, please wait. This might take a while. \n";
             fs::create_directory(client_dir);
             fs::create_directory(tl_dir);
+            std::cout << "Copying minecraft. \n";
             fs::copy(client_dir, clientf_des, fs::copy_options::recursive);
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            std::cout << "Copying tlauncher. \n";
             fs::copy(tl_dir, tlf_des, fs::copy_options::recursive);
-            std::cout << "Folders copied successfully!" << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            std::cout << "Folders copied successfully! \n";
+            std::this_thread::sleep_for(std::chrono::seconds(3));
         }
         catch (const fs::filesystem_error& e) {
             std::cerr << "Error copying folder: " << e.what() << std::endl;
@@ -81,8 +95,7 @@ int setdir(bool isjava, bool istl, bool isclient, bool defjava) {
     if (istl == true && isclient == true && isjava == true or defjava == true) {
         std::ifstream file(".tlauncher\\tlauncher-2.0.properties");
         if (!file.is_open()) {
-            std::cerr << "Cant open file." << std::endl;
-
+            std::cerr << "Cant open tlauncher-2.0.properties file. \n";
         }
         std::vector<std::string> lines;
         std::string line;
@@ -94,15 +107,16 @@ int setdir(bool isjava, bool istl, bool isclient, bool defjava) {
                 std::ofstream destination_file(".tlauncher\\temp1.txt");
 
                 if (!source_file.is_open()) {
-                    std::cerr << "Cant open main file." << std::endl;
+                    std::cerr << "Cant open main file. \n";
                     return 1;
                 }
 
                 if (!destination_file.is_open()) {
-                    std::cerr << "Cant open temp file." << std::endl;
+                    std::cerr << "Cant open temp file. \n";
                     source_file.close();
 
                 }
+                std::this_thread::sleep_for(std::chrono::seconds(3));
                 char ch;
                 while (source_file.get(ch)) {
                     destination_file << ch;
@@ -118,6 +132,7 @@ int setdir(bool isjava, bool istl, bool isclient, bool defjava) {
                     if (line.find("minecraft.gamedir=") == 0) {
                         output_file << "minecraft.gamedir=C\\:\\\\Users\\\\" << username << "\\\\AppData\\\\Roaming\\\\.minecraft\n";
                         ischanged = true;
+                        std::this_thread::sleep_for(std::chrono::seconds(2));
                         movef(isjava, istl, isclient, ischanged, defjava);
                     }
                     else {
@@ -132,7 +147,7 @@ int setdir(bool isjava, bool istl, bool isclient, bool defjava) {
         }
     }
     else {
-        std::cout << "Please check your files and folders.";
+        std::cout << "Please check your files and folders. \n";
     }
 
 };
@@ -181,7 +196,7 @@ int checkex() {
         std::string command = "java -version";
         int result = system(command.c_str());
         if (result == 0) {
-            std::cout << "Java is installed by default on this machine." << std::endl;
+            std::cout << "Java is installed by default on this machine. \n";
             ifjava = true;
             defjava = true;
             setdir(ifjava, iftl, ifclient, defjava);
@@ -196,13 +211,13 @@ int checkex() {
         std::string command = "java -version";
         int result = system(command.c_str());
         if (result == 0) {
-            std::cout << "Java is installed by default on this machine." << std::endl;
+            std::cout << "Java is installed by default on this machine. \n";
             ifjava = false;
             defjava = true;
             setdir(ifjava, iftl, ifclient, defjava);
         }
         else {
-            std::cout << "Java is not installed and not found in the folders." << std::endl;
+            std::cout << "Java is not installed and not found in the folders. \n";
             ifjava = false;
             defjava = false;
             setdir(ifjava, iftl, ifclient, defjava);
@@ -213,7 +228,6 @@ int checkex() {
 int launch(bool ftls, bool fcls, bool fjvs, bool fjav) {
     std::locale::global(std::locale(""));
     if (ftls == true && fcls == true && fjav == true) {
-        std::locale::global(std::locale(""));
         char* user = getenv("username");
         std::string username(user, strlen(user));
         std::string tls = "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
@@ -226,11 +240,10 @@ int launch(bool ftls, bool fcls, bool fjvs, bool fjav) {
         }
     }
     if (ftls == true && fcls == true && fjav == false && fjvs == true) {
-        std::locale::global(std::locale(""));
         char* user = getenv("username");
         std::string username(user, strlen(user));
         std::string tls = "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
-        std::string cmd = "C:\\Users\\" + username + "\\AppData\\Roaming\\javap\\bin\\java.exe" + "-jar" + "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
+        std::string cmd = "C:\\Users\\" + username + "\\AppData\\Roaming\\javap\\bin\\java.exe " + "-jar " + "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\TLauncher.exe";
         fs::path tl_dir = tls;
         if (fs::exists(tls)) {
             int result = system(cmd.c_str());
