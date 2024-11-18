@@ -6,10 +6,10 @@
 
 
 ### How to use:
-1. Dowload the archived version of TLauncher (.tlauncher), Minecraft (.minecraft), javap(archived jdk 21) and Tloader.exe
-2. Unzip the files
-3. Copy the files in to the same directory as the Tloader
-4. Open Tloader and wait
+1. Dowload the archived version of TLauncher (.tlauncher), Minecraft (.minecraft), javap(archived jdk 21) and Tloader.exe (Tloader_packed_recommended.zip).
+2. Unzip the folder.
+3. Open Tloader and wait for it to finish copying.
+4. Reopen Tloader and done.
 
 ### Clone the project
 ```
