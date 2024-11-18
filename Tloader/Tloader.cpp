@@ -15,22 +15,23 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged, bool defjava) {
 
     std::locale::global(std::locale(""));
     //the folders must be in the same directory as the executable
-    std::string javaf = "javap";
-    std::string tlf = ".tlauncher";
-    std::string clientf = ".minecraft";
-
-    fs::path javaf_dir = fs::current_path() / javaf;
-    fs::path tlf_dir = fs::current_path() / tlf;
-    fs::path clientf_dir = fs::current_path() / clientf;
-
     std::string crp = fs::current_path().string();
     char* user = getenv("username");
     std::string username(user, strlen(user));
 
-    std::string replace =  username;
-    std::string path = "C:\\Users\\x\\AppData\\Roaming";
+    std::string java = "javap";
+    std::string tlf = ".tlauncher";
+    std::string clientf = ".minecraft";
 
-    path.replace(9, 1, replace);
+    fs::path java_dir = fs::current_path() / java;
+    fs::path tl_dir = fs::current_path() / tlf;
+    fs::path client_dir = fs::current_path() / clientf;
+
+    fs::path javaf_des = "C:\\Users\\" + username + "\\AppData\\Roaming\\javap";
+    fs::path tlf_des = "C:\\Users\\" + username + "\\AppData\\Roaming\\.tlauncher";
+    fs::path clientf_des = "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft";
+
+    std::string path = "C:\\Users\\" + username + "\\AppData\\Roaming";
 
     fs::path appdata_dir = path;
 
@@ -38,13 +39,34 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged, bool defjava) {
 
     if (isjava == true && istl == true && isclient == true && ischanged == true) {
         std::cout << "All required folders are found, and they are ready to be moved. \n";
-        //this moves the "javap" folder too, but there will be that only moves the .tl and .mine folders
-        //copying the folders and files to the appdata folder using the "path" string...
+        try {
+            fs::create_directory(javaf_des);
+            fs::create_directory(client_dir);
+            fs::create_directory(tl_dir);
+            fs::copy(java_dir, javaf_des, fs::copy_options::recursive);
+            fs::copy(client_dir, clientf_des, fs::copy_options::recursive);
+            fs::copy(tl_dir, tlf_des, fs::copy_options::recursive);
+            std::cout << "Folders copied successfully!" << std::endl;
+
+        }
+        catch (const std::filesystem::filesystem_error& e) {
+            std::cerr << "Error copying folder: " << e.what() << std::endl;
+        }
     }
-    else {
-        std::cout << "You are missing something \n";
+    if (defjava == true && istl == true && isclient == true && ischanged == true) {
+        try {
+            std::cout << "All required folders are found, and they are ready to be moved. \n";
+            fs::create_directory(client_dir);
+            fs::create_directory(tl_dir);
+            fs::copy(client_dir, clientf_des, fs::copy_options::recursive);
+            fs::copy(tl_dir, tlf_des, fs::copy_options::recursive);
+            std::cout << "Folders copied successfully!" << std::endl;
+        }
+        catch (const fs::filesystem_error& e) {
+            std::cerr << "Error copying folder: " << e.what() << std::endl;
+        }
+
     }
-    
     return 0;
 };
 
@@ -96,7 +118,7 @@ int setdir(bool isjava, bool istl, bool isclient, bool defjava) {
                     if (line.find("minecraft.gamedir=") == 0) {
                         output_file << "minecraft.gamedir=C\\:\\\\Users\\\\" << username << "\\\\AppData\\\\Roaming\\\\.minecraft\n";
                         ischanged = true;
-                        //movef();
+                        movef(isjava, istl, isclient, ischanged, defjava);
                     }
                     else {
                         output_file << line << "\n";
@@ -106,7 +128,6 @@ int setdir(bool isjava, bool istl, bool isclient, bool defjava) {
                 input_file.close();
                 output_file.close();
 
-                //std::this_thread::sleep_for(std::chrono::seconds(5));
             }
         }
     }
@@ -284,4 +305,5 @@ __/\\\\\\\\\\\\\\\__/\\\\\\_________________________________________/\\\________
     //launch();
     //checkex();
     isinstalled();
+    //movef();
 }
