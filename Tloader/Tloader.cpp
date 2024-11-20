@@ -15,6 +15,10 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged, bool defjava) {
 
     std::locale::global(std::locale(""));
     //the folders must be in the same directory as the executable
+
+    bool mvjava = false;
+    bool mvtl = false;
+    bool mvclient = false;
     std::string crp = fs::current_path().string();
     char* user = getenv("username");
     std::string username(user, strlen(user));
@@ -31,6 +35,16 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged, bool defjava) {
     fs::path tlf_des = "C:\\Users\\" + username + "\\AppData\\Roaming\\.tlauncher";
     fs::path clientf_des = "C:\\Users\\" + username + "\\AppData\\Roaming\\.minecraft";
 
+    if (fs::exists(javaf_des)) {
+        mvjava = true;
+    }
+    if (fs::exists(tlf_des)) {
+        mvtl = true;
+    }
+    if (fs::exists(clientf_des)) {
+        mvclient = true;
+    }
+
     std::string path = "C:\\Users\\" + username + "\\AppData\\Roaming";
 
     fs::path appdata_dir = path;
@@ -41,43 +55,55 @@ int movef(bool isjava, bool istl, bool isclient, bool ischanged, bool defjava) {
         std::cout << "All required folders are found, and they are ready to be moved. \n";
         try {
             std::cout << "Copying in progress, please wait. This might take a while. \n";
-            fs::create_directory(javaf_des);
-            fs::create_directory(client_dir);
-            fs::create_directory(tl_dir);
-            std::cout << "Copying java." << std::endl;
-            fs::copy(java_dir, javaf_des, fs::copy_options::recursive);
-            std::this_thread::sleep_for(std::chrono::seconds(3));
-            std::cout << "Copying minecraft." << std::endl;
-            fs::copy(client_dir, clientf_des, fs::copy_options::recursive);
-            std::this_thread::sleep_for(std::chrono::seconds(3));
-            std::cout << "Copying tlauncher." << std::endl;
-            fs::copy(tl_dir, tlf_des, fs::copy_options::recursive);
+            if (mvjava == false) {
+                std::cout << "Copying java.." << std::endl;
+                fs::create_directory(javaf_des);
+                std::this_thread::sleep_for(std::chrono::seconds(3));
+                fs::copy(java_dir, javaf_des, fs::copy_options::recursive);
+            }
+            if (mvtl == false) {
+                std::cout << "Copying tlauncher.." << std::endl;
+                fs::create_directory(tlf_des);
+                std::this_thread::sleep_for(std::chrono::seconds(3));
+                fs::copy(tl_dir, tlf_des, fs::copy_options::recursive);
+            }
+            if (mvclient == false) {
+                std::cout << "Copying minecraft.." << std::endl;
+                fs::create_directory(clientf_des);
+                std::this_thread::sleep_for(std::chrono::seconds(3));
+                fs::copy(client_dir, clientf_des, fs::copy_options::recursive);
+            }
             std::this_thread::sleep_for(std::chrono::seconds(3));
             std::cout << "Folders copied successfully!" << std::endl;
-            std::this_thread::sleep_for(std::chrono::seconds(3));
 
         }
         catch (const std::filesystem::filesystem_error& e) {
             std::cerr << "Error copying folder: " << e.what() << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(3));
         }
     }
     if (defjava == true && isjava == false && istl == true && isclient == true && ischanged == true) {
         try {
             std::cout << "All required folders are found, and they are ready to be moved. \n";
             std::cout << "Copying in progress, please wait. This might take a while. \n";
-            fs::create_directory(client_dir);
-            fs::create_directory(tl_dir);
-            std::cout << "Copying minecraft. \n";
-            fs::copy(client_dir, clientf_des, fs::copy_options::recursive);
+            if (mvtl == false) {
+                std::cout << "Copying tlauncher.." << std::endl;
+                fs::create_directory(tlf_des);
+                std::this_thread::sleep_for(std::chrono::seconds(3));
+                fs::copy(tl_dir, tlf_des, fs::copy_options::recursive);
+            }
+            if (mvclient == false) {
+                std::cout << "Copying minecraft.." << std::endl;
+                fs::create_directory(clientf_des);
+                std::this_thread::sleep_for(std::chrono::seconds(3));
+                fs::copy(client_dir, clientf_des, fs::copy_options::recursive);
+            }
             std::this_thread::sleep_for(std::chrono::seconds(3));
-            std::cout << "Copying tlauncher. \n";
-            fs::copy(tl_dir, tlf_des, fs::copy_options::recursive);
-            std::this_thread::sleep_for(std::chrono::seconds(3));
-            std::cout << "Folders copied successfully! \n";
-            std::this_thread::sleep_for(std::chrono::seconds(3));
+            std::cout << "Folders copied successfully!" << std::endl;
         }
         catch (const fs::filesystem_error& e) {
             std::cerr << "Error copying folder: " << e.what() << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(3));
         }
 
     }
