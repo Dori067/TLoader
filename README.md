@@ -18,3 +18,6 @@
 git clone --branch dev https://github.com/Dori067/TLoader --recursive
 cd Tloader
 ```
+
+
+this whole project is kinda useless but i will add some features to it
