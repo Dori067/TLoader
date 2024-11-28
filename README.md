@@ -1,6 +1,6 @@
 # Tloader
 
-## This project is completely useless becase you can do the same just by downloading the offical Tlauncher Linux version and running it using java (portable java too).
+## This project is completely useless becase you can do the same just by downloading the offical Tlauncher Linux version and running it using java on windows (portable java).
 
 
 
