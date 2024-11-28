@@ -1,5 +1,9 @@
 # Tloader
 
+## This project is completely useless becase you can do the same just by downloading the offical Tlauncher Linux version and running it using java (portable java too).
+
+
+
 ### Install TLauncher using archived versions of ".tlauncher" and ".minecraft" files, along with a portable version of Java. This allows you to install TLauncher without needing administrator privileges, making it ideal for use on school or work computers.
 > [!NOTE]
 > TLoader acts as a launcher and preparer for Tlauncher. Once the program prepared the game files it will act as a launcher for it.
@@ -20,4 +24,4 @@ cd Tloader
 ```
 
 
-this whole project is kinda useless but i will add some features to it
+this whole project is kinda useless, if you wanna make something out of it, sure why not
